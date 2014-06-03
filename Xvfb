@@ -1,0 +1,52 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          Xvfb
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Xvfb
+# Description:       Init script for Xvfb
+### END INIT INFO
+
+# Author: Yves Hwang
+
+# Yves Hwang, 03.06.2014
+# Based on http://www.labelmedia.co.uk/blog/setting-up-selenium-server-on-a-headless-jenkins-ci-build-machine.html
+
+# Do NOT "set -e"
+
+DESC="Xvfb"
+NAME=Xvfb
+DAEMON=/usr/bin/$NAME
+SCRIPTNAME=/etc/init.d/$NAME
+
+DAEMON_OPTS=":99 -ac -screen 0 1024x768x8"
+
+# Exit if the package is not installed
+[ -x "$DAEMON" ] || exit 0
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
+
+if [ -z "$1" ]; then
+    echo "`basename $0` {start|stop}"
+    exit
+fi
+
+case "$1" in
+    start)
+        $DAEMON $DAEMON_OPTS > /dev/null 2>/dev/null &
+        ;;
+
+    stop)
+        killall $NAME
+        ;;
+esac

@@ -1,0 +1,124 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          selenium-grid
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Selenium Grid
+# Description:       Provides Selenium Grid
+### END INIT INFO
+
+# Author: Yves Hwang
+
+# Yves Hwang, 03.06.2014
+# Based on http://www.debian-administration.org/users/fugit/weblog/6 
+
+SELENIUM_COMPONENT="Selenium Grid"
+INTERNAL_NAME=selenium-server
+SELENIUM_HOME=/usr/local/selenium
+LOG_DIR=$SELENIUM_HOME
+ERROR_LOG=$LOG_DIR/${INTERNAL_NAME}_error.log
+STD_LOG=$LOG_DIR/${INTERNAL_NAME}_std.log
+TMP_DIR=$SELENIUM_HOME
+PID_FILE=$TMP_DIR/${INTERNAL_NAME}.pid
+JAVA=/usr/bin/java
+SELENIUM_APP="$SELENIUM_HOME/selenium-server-standalone-2.42.1.jar"
+USER=selenium
+XDISPLAY="export DISPLAY=:99"
+
+DAEMON_OPTS="-role hub"
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
+
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
+. /lib/lsb/init-functions
+
+
+case "$1" in
+        start)
+                if test -f $PID_FILE
+                    then
+                        PID=`cat $PID_FILE`
+                        if  ps --pid $PID >/dev/null  ;
+                            then
+                                echo "$SELENIUM_COMPONENT is running...$PID"
+                                exit 0 
+                            else
+                                echo "$SELENIUM_COMPONENT isn't running..."
+                                echo "Removing stale pid file: $PID_FILE"
+                        fi
+                fi
+                echo "Starting $SELENIUM_COMPONENT ..."
+                $XDISPLAY && $JAVA -jar $SELENIUM_APP $DAEMON_OPTS >$STD_LOG 2>$ERROR_LOG &
+                error=$?
+                if test $error -gt 0
+                    then
+                        echo "${bon}Error $error! Couldn't start $SELENIUM_COMPONENT ${boff}"
+                fi
+                ps  -C java -o pid,cmd | grep $SELENIUM_APP  | awk {'print $1 '} > $PID_FILE
+                ;;
+        stop)
+                if test -f $PID_FILE
+                    then
+                        echo "Stopping $SELENIUM_COMPONENT ..."
+                        PID=`cat $PID_FILE`
+                        kill -3 $PID
+                        if kill -9 $PID ;
+                            then
+                                sleep 2
+                                test -f $PID_FILE && rm -f $PID_FILE
+                            else
+                                echo "$SELENIUM_COMPONENT could not be stopped..."
+                        fi
+                    else
+                        echo "$SELENIUM_COMPONENT is not running."
+                fi
+                ;;
+        restart)
+                if test -f $PID_FILE
+                    then
+                        kill -HUP `cat $PID_FILE`
+                        test -f $PID_FILE && rm -f $PID_FILE
+                        sleep 1
+                        $XDISPLAY && $JAVA -jar $SELENIUM_APP $DAEMON_OPTS >$STD_LOG 2>$ERROR_LOG &
+                        error=$?
+                        if test $error -gt 0
+                            then
+                                echo "${bon}Error $error! Couldn't start Selenium!${boff}"
+                        fi
+                        ps  -C java -o pid,cmd | grep $SELENIUM_APP  | awk {'print $1 '} > $PID_FILE
+                        echo "Reload $SELENIUM_COMPONENT ..."
+                    else
+                        echo "$SELENIUM_COMPONENT isn't running..."
+                fi
+                ;;
+        status)
+                if test -f $PID_FILE
+                    then
+                        PID=`cat $PID_FILE`
+                        if  ps --pid $PID >/dev/null ;
+                            then
+                                echo "$SELENIUM_COMPONENT is running...$PID"
+                            else
+                                echo "$SELENIUM_COMPONENT isn't running..."
+                        fi
+                    else
+                        echo "$SELENIUM_COMPONENT isn't running..."
+                fi
+                ;;
+        *)      # no parameter specified
+                echo "Usage: $SELF start|stop|restart|status"
+                exit 1
+                ;;
+esac
