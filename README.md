@@ -1,4 +1,4 @@
-03.06.2014
+05.06.2014
 
 Yves Hwang
 http://macyves.wordpress.com
@@ -6,7 +6,7 @@ http://macyves.wordpress.com
 selenium-2step
 ==============
 
-2 step way to get selenium grid, selenium node and a headless firefox going. init.d script included.
+2 step way to get selenium grid, selenium node and a headless firefox and chrome going. init.d script included.
 
 A simple selenium template for 1 min setup for to get Selenium grid and a node going, with all inclusive init.d scripts.
 
