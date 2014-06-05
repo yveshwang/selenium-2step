@@ -11,7 +11,7 @@
 
 # Author: Yves Hwang
 
-# Yves Hwang, 03.06.2014
+# Yves Hwang, 05.06.2014
 # Based on http://www.labelmedia.co.uk/blog/setting-up-selenium-server-on-a-headless-jenkins-ci-build-machine.html
 
 # Do NOT "set -e"
@@ -21,7 +21,7 @@ NAME=Xvfb
 DAEMON=/usr/bin/$NAME
 SCRIPTNAME=/etc/init.d/$NAME
 
-DAEMON_OPTS=":99 -ac -screen 0 1024x768x8"
+DAEMON_OPTS=":99 -ac -screen 0 1024x768x16"
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0

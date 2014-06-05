@@ -11,7 +11,7 @@
 
 # Author: Yves Hwang
 
-# Yves Hwang, 03.06.2014
+# Yves Hwang, 05.06.2014
 # Based on http://www.debian-administration.org/users/fugit/weblog/6 
 
 SELENIUM_COMPONENT="Selenium node"
@@ -26,8 +26,9 @@ JAVA=/usr/bin/java
 SELENIUM_APP="$SELENIUM_HOME/selenium-server-standalone-2.42.1.jar"
 USER=selenium
 XDISPLAY="export DISPLAY=:99"
+CHROMEDRIVER_PATH=/usr/local/selenium/chromedriver
 
-DAEMON_OPTS="-role node -hub http://127.0.0.1:4444/grid/register"
+DAEMON_OPTS="-role node -hub http://127.0.0.1:4444/grid/register -Dwebdriver.chrome.driver=$CHROMEDRIVER_PATH"
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
