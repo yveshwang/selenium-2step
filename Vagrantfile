@@ -34,16 +34,16 @@ unzip /usr/local/selenium/*.zip -d /usr/local/selenium
 dpkg -i /usr/local/selenium/google-chrome*; sudo apt-get -f install -y
 echo ==== Setting up Xvfb ====
 apt-get install xvfb -y
-cp /vagrant/testing/seleniumTest/Xvfb /etc/init.d/.
+cp /vagrant/Xvfb /etc/init.d/.
 update-rc.d Xvfb defaults
 service Xvfb start
 echo ==== Setting up selenium ====
 wget http://selenium-release.storage.googleapis.com/2.42/selenium-server-standalone-2.42.1.jar
 mv *.jar /usr/local/selenium/.
-cp /vagrant/testing/seleniumTest/selenium-grid /etc/init.d/.
+cp /vagrant/selenium-grid /etc/init.d/.
 update-rc.d selenium-grid defaults
 service selenium-grid start
-cp /vagrant/testing/seleniumTest/selenium-node /etc/init.d/.
+cp /vagrant/selenium-node /etc/init.d/.
 update-rc.d selenium-node defaults
 service selenium-node start
 SCRIPT
