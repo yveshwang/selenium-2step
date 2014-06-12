@@ -8,6 +8,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define :selenium do |selenium|
+        selenium.vm.synced_folder "./", "/vagrant/testing/seleniumTest"
         selenium.vm.box = "precise64"
         selenium.vm.box_url = "http://files.vagrantup.com/precise64.box"
         selenium.vm.network "forwarded_port", guest: 4444, host:4444
