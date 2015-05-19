@@ -17,13 +17,17 @@
 SELENIUM_COMPONENT="Selenium node"
 INTERNAL_NAME=selenium-node
 SELENIUM_HOME=/usr/local/selenium
+
+# Load the config
+source $SELENIUM_HOME/config.env
+
 LOG_DIR=$SELENIUM_HOME
 ERROR_LOG=$LOG_DIR/${INTERNAL_NAME}_error.log
 STD_LOG=$LOG_DIR/${INTERNAL_NAME}_std.log
 TMP_DIR=$SELENIUM_HOME
 PID_FILE=$TMP_DIR/${INTERNAL_NAME}.pid
 JAVA=/usr/bin/java
-SELENIUM_APP="$SELENIUM_HOME/selenium-server-standalone-2.42.1.jar"
+SELENIUM_APP="$SELENIUM_HOME/$SELENIUM_JAR"
 USER=selenium
 XDISPLAY="export DISPLAY=:99"
 CHROMEDRIVER_PATH=/usr/local/selenium/chromedriver
